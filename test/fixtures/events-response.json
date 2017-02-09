@@ -1,0 +1,43 @@
+{
+  "total": 2,
+  "data": [
+    {
+      "id": "online",
+      "logo": {
+        "url": "http://cdn.livestream.com/newlivestream/poster-default.jpeg",
+        "thumbnailUrl": "http://cdn.livestream.com/newlivestream/poster-default.jpeg",
+        "smallUrl": "http://cdn.livestream.com/newlivestream/poster-default.jpeg"
+      },
+      "description": null,
+      "draft": false,
+      "fullName": "Watch Us Code",
+      "shortName": null,
+      "ownerAccountId": 21627744,
+      "viewerCount": 1,
+      "createdAt": "2016-10-03T15:19:56.670Z",
+      "startTime": "2016-10-03T15:19:00.000Z",
+      "endTime": "2016-10-03T16:19:00.000Z",
+      "tags": [],
+      "isLive": true
+    },
+    {
+      "id": "offline",
+      "logo": {
+        "url": "http://cdn.livestream.com/newlivestream/poster-default.jpeg",
+        "thumbnailUrl": "http://cdn.livestream.com/newlivestream/poster-default.jpeg",
+        "smallUrl": "http://cdn.livestream.com/newlivestream/poster-default.jpeg"
+      },
+      "description": null,
+      "draft": false,
+      "fullName": "Odd Office",
+      "shortName": null,
+      "ownerAccountId": 21627744,
+      "viewerCount": 1,
+      "createdAt": "2016-10-03T14:08:34.591Z",
+      "startTime": "2016-10-03T14:08:00.000Z",
+      "endTime": "2016-10-03T15:08:00.000Z",
+      "tags": [],
+      "isLive": false
+    }
+  ]
+}

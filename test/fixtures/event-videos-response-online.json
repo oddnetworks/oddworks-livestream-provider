@@ -1,0 +1,52 @@
+{
+  "vods": {
+    "total": 1,
+    "data": [
+      {
+        "type": "video",
+        "data": {
+          "id": 137760416,
+          "draft": false,
+          "views": 2,
+          "likes": {
+            "total": 0
+          },
+          "comments": {
+            "total": 0
+          },
+          "caption": "Stream 1 Test",
+          "description": null,
+          "duration": 475897,
+          "eventId": 6445688,
+          "createdAt": "2016-10-03T15:25:17.236Z",
+          "publishAt": "2016-10-03T15:33:19.704Z",
+          "tags": [],
+          "thumbnailUrl": "http://img.new.livestream.com/events/0000000000625a78/0a438a3d-0d6e-4be6-a61c-0d222960c228_180.jpg",
+          "thumbnailUrlSmall": "http://img.new.livestream.com/events/0000000000625a78/0a438a3d-0d6e-4be6-a61c-0d222960c228_180_150x84.jpg",
+          "m3u8": "https://livestreamapis.com/v2/accounts/bar/events/online/videos/137760416.m3u8"
+        }
+      }
+    ]
+  },
+  "live": {
+    "id": 119609170,
+    "draft": false,
+    "views": 0,
+    "likes": {
+      "total": 0
+    },
+    "comments": {
+      "total": 0
+    },
+    "caption": "Live 24/7",
+    "description": "Live",
+    "duration": 0,
+    "eventId": 5201341,
+    "createdAt": "2016-09-14T14:38:55.173Z",
+    "publishAt": null,
+    "tags": [],
+    "thumbnailUrl": "http://img.new.livestream.com/events/0000000000037d81/7d51fd99-376b-5t78-bb9f-fe872e70cafe_0.jpg",
+    "thumbnailUrlSmall": "http://img.new.livestream.com/events/0000000000037d81/7d51fd99-376b-4d62-yu3t-fe872e70cafe_0_150x84.jpg",
+    "m3u8": "https://livestreamapis.com/v2/accounts/18855759/events/5201341/master.m3u8"
+  }
+}
