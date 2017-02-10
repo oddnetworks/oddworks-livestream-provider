@@ -27,6 +27,7 @@ const listCommand = () => {
 const requestCommand = args => {
 	const apiKey = args.apiKey;
 	const accountId = args.accountId;
+	const clientId = args.clientId;
 	const method = args.method;
 
 	if (!apiKey) {
@@ -39,6 +40,11 @@ const requestCommand = args => {
 		return Promise.resolve(null);
 	}
 
+	if (!clientId) {
+		console.error('An clientId is required (--clientId)');
+		return Promise.resolve(null);
+	}
+
 	let params;
 	try {
 		params = JSON.parse(args.args);
@@ -48,7 +54,7 @@ const requestCommand = args => {
 		return Promise.resolve(null);
 	}
 
-	const client = new Client({apiKey, accountId});
+	const client = new Client({apiKey, accountId, clientId});
 
 	return client[method](params).then(res => {
 		console.log(JSON.stringify(res, null, 2));
@@ -75,6 +81,9 @@ exports.main = () => {
 						},
 						accountId: {
 							describe: 'Defaults to env var LIVESTREAM_ACCOUNT_ID'
+						},
+						clientId: {
+							describe: 'Defaults to env var LIVESTREAM_CLIENT_ID'
 						}
 					})
 					.command('list', 'List client methods')
@@ -89,7 +98,8 @@ exports.main = () => {
 		case 'req':
 			return requestCommand({
 				apiKey: argv.apiKey || process.env.LIVESTREAM_API_KEY,
-				accountId: argv.accountId || process.env.LIVESTREAM_CLIENT_ID,
+				accountId: argv.accountId || process.env.LIVESTREAM_ACCOUNT_ID,
+				clientId: argv.clientId || process.env.LIVESTREAM_CLIENT_ID,
 				method: argv.method,
 				args: argv.args
 			});
