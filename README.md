@@ -104,14 +104,10 @@ const client = livestreamProvider.createClient({
 ### Client Methods
 All methods return a Promise.
 
-- `client.lookupGenre({genreId})`
-- `client.lookupTheme({themeId})`
-- `client.getTitle({titleId})`
-- `client.getTitleGenres({titleId})`
-- `client.getTitleReleases({titleId})`
-- `client.getTitleThemes({titleId})`
-- `client.getTitleVideos({titleId})`
-- `client.getVideoStreams({videoId})`
+- `client.getPastEvents()`
+- `client.getUpcomingEvents()`
+- `client.getEvent({id})`
+- `client.getEventVideos({id})`
 
 Command Line Interface
 ----------------------
@@ -122,7 +118,8 @@ You can interact with the Livestream client using the CLI tool. To get started, 
 To authenticate the API you'll need to export the following environment variables:
 
 - `LIVESTREAM_API_KEY` The Livestream API key
-- `LIVESTREAM_CLIENT_ID` The Livestream Partner key
+- `LIVESTREAM_ACCOUNT_ID` The Livestream Account ID
+- `LIVESTREAM_CLIENT_ID` The Livestream Client ID
 
 To get help with commands:
 
