@@ -12,6 +12,7 @@ const helpers = require('./helpers');
 
 const apiKey = 'foo';
 const accountId = 'bar';
+const clientId = 'baz';
 
 const getChannel = () => {
 	return Promise.resolve({
@@ -19,7 +20,8 @@ const getChannel = () => {
 		secrets: {
 			livestream: {
 				apiKey,
-				accountId
+				accountId,
+				clientId
 			}
 		}
 	});
@@ -101,7 +103,7 @@ test('when live event found', t => {
 			t.is(res.images[1].url, eventResponseOnline.logo.smallUrl);
 			t.is(res.sources.length, 1);
 
-			t.is(res.sources[0].url, `https://livestreamapis.com/v2/accounts/${accountId}/events/${eventResponseOnline.id}/master.m3u8`);
+			t.regex(res.sources[0].url, /https:\/\/livestreamapis.com\/v2\/accounts\/bar\/events\/online\/master.m3u8/);
 			t.is(res.sources[0].label, '');
 			t.is(res.sources[0].mimeType, 'application/x-mpegURL');
 			t.is(res.sources[0].width, null);
@@ -178,7 +180,7 @@ test('when vod found', t => {
 			t.is(res.images[1].url, vod.thumbnailUrlSmall);
 			t.is(res.sources.length, 1);
 
-			t.is(res.sources[0].url, `https://livestreamapis.com/v2/accounts/${accountId}/events/${spec.event.id}/videos/${vod.id}.m3u8`);
+			t.regex(res.sources[0].url, /https:\/\/livestreamapis.com\/v2\/accounts\/bar\/events\/online\/videos\/137760416.m3u8/);
 			t.is(res.sources[0].label, '');
 			t.is(res.sources[0].mimeType, 'application/x-mpegURL');
 			t.is(res.sources[0].width, null);

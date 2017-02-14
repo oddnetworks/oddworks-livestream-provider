@@ -12,6 +12,7 @@ const helpers = require('./helpers');
 
 const apiKey = 'foo';
 const accountId = 'bar';
+const clientId = 'baz';
 
 const getChannel = () => {
 	return Promise.resolve({
@@ -19,7 +20,8 @@ const getChannel = () => {
 		secrets: {
 			livestream: {
 				apiKey,
-				accountId
+				accountId,
+				clientId
 			}
 		}
 	});
@@ -114,7 +116,7 @@ test('when collection of videos is found', t => {
 			t.is(res.images[0].url, eventResponseOffline.logo.url);
 			t.is(res.images[1].url, eventResponseOffline.logo.smallUrl);
 			t.is(res.relationships.entities.data.length, eventVideosResponseOffline.vods.data.length);
-			t.is(res.relationships.entities.data[0].id, `res-livestream-video-${eventVideosResponseOffline.vods.data[0].id}`);
+			t.is(res.relationships.entities.data[0].id, `res-livestream-video-${eventVideosResponseOffline.vods.data[0].data.id}`);
 			t.is(res.relationships.entities.data[0].type, 'video');
 		});
 });
