@@ -97,7 +97,7 @@ test('when live event found and broadcasting', t => {
 				'releaseDate',
 				'meta'
 			]);
-			t.is(res.id, `res-livestream-video-${eventVideosResponseOnline.live.id}`);
+			t.is(res.id, `res-livestream-video-online`);
 			t.is(res.title, eventVideosResponseOnline.live.caption);
 			t.is(res.description, eventVideosResponseOnline.live.description);
 			t.is(res.images.length, 2);
@@ -189,7 +189,7 @@ test('when vod found', t => {
 
 			const vod = videoResponseOnline;
 
-			t.is(res.id, `res-livestream-video-${vod.id}`);
+			t.is(res.id, `res-livestream-video-online`);
 			t.is(res.title, vod.caption);
 			t.is(res.description, vod.description);
 			t.is(res.images.length, 2);
