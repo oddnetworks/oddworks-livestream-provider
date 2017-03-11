@@ -47,6 +47,6 @@
     "tags": [],
     "thumbnailUrl": "http://img.new.livestream.com/events/0000000000037d81/7d51fd99-376b-5t78-bb9f-fe872e70cafe_0.jpg",
     "thumbnailUrlSmall": "http://img.new.livestream.com/events/0000000000037d81/7d51fd99-376b-4d62-yu3t-fe872e70cafe_0_150x84.jpg",
-    "m3u8": "https://livestreamapis.com/v2/accounts/18855759/events/5201341/master.m3u8"
+    "m3u8": "https://livestreamapis.com/v2/accounts/bar/events/online/master.m3u8"
   }
 }

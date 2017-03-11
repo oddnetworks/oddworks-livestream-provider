@@ -85,6 +85,7 @@ test('when event not found', t => {
 			t.is(event.code, 'COLLECTION_NOT_FOUND');
 			t.deepEqual(event.spec, spec);
 			t.is(event.message, 'collection not found');
+			return null;
 		});
 	});
 });
@@ -118,5 +119,6 @@ test('when collection of videos is found', t => {
 			t.is(res.relationships.entities.data.length, eventVideosResponseOffline.vods.data.length);
 			t.is(res.relationships.entities.data[0].id, `res-livestream-video-${eventVideosResponseOffline.vods.data[0].data.id}`);
 			t.is(res.relationships.entities.data[0].type, 'video');
+			return null;
 		});
 });
