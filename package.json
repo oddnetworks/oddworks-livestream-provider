@@ -26,9 +26,7 @@
   "homepage": "https://github.com/oddnetworks/oddworks-livestream-provider#readme",
   "dependencies": {
     "bluebird": "^3.4.6",
-    "boom": "^4.0.0",
     "debug": "^2.2.0",
-    "lru-cache": "^4.0.2",
     "request": "^2.74.0",
     "yargs": "^5.0.0"
   },
