@@ -106,6 +106,7 @@ All methods return a Promise.
 
 - `client.getPastEvents()`
 - `client.getUpcomingEvents()`
+- `client.getPriveateEvents()`
 - `client.getEvent({id})`
 - `client.getEventVideos({id})`
 
