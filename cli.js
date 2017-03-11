@@ -11,6 +11,7 @@ REQUEST_METHODS.getUpcomingEvents = '{"page": 1, "maxItems": 10}';
 REQUEST_METHODS.getPrivateEvents = '{"page": 1, "maxItems": 10}';
 REQUEST_METHODS.getEvent = '{"id": "STRING"}';
 REQUEST_METHODS.getEventVideos = '{"id": "STRING"}';
+REQUEST_METHODS.getVideo = '{"eventId": "STRING", "id": "STRING"}';
 
 const ENVIRONMENT_VARIABLES = [
 	'LIVESTREAM_API_KEY',
