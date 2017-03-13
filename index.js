@@ -15,6 +15,9 @@ const DEFAULTS = {
 	videoTransform: defaultVideoTransform
 };
 
+exports.SEASON_TAG_PATTERN = /^[sS]{1}-[\d]+/;
+exports.EPISODE_TAG_PATTERN = /^[eE]{1}-[\d]+/;
+
 // options.bus
 // options.accessToken
 // options.collectionTransform
