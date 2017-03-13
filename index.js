@@ -164,27 +164,19 @@ exports.createVideoHandler = (bus, getChannel, client, transform) => {
 	};
 };
 
-// options.accessToken *required
-// options.bus *optional
+// options.bus
+// options.apiKey
+// options.accountId
+// options.clientId
 exports.createClient = options => {
 	options = Object.assign({}, DEFAULTS, options || {});
 
 	const bus = options.bus;
 	const apiKey = options.apiKey;
 	const accountId = options.accountId;
+	const clientId = options.clientId;
 
-	if (!apiKey || typeof apiKey !== 'string') {
-		throw new Error(
-			'oddworks-livestream-provider requires an apiToken'
-		);
-	}
-	if (!accountId || typeof accountId !== 'string') {
-		throw new Error(
-			'oddworks-livestream-provider requires an accountId'
-		);
-	}
-
-	return new Client({bus, apiKey, accountId});
+	return new Client({bus, apiKey, accountId, clientId});
 };
 
 exports.composeVideoId = (channel, event, video) => {
