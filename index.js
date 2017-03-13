@@ -7,6 +7,8 @@ const defaultCollectionTransform = require('./lib/default-collection-transform')
 const createChannelCache = require('./lib/create-channel-cache');
 const fetchVideo = require('./lib/fetch-video');
 const fetchCollection = require('./lib/fetch-collection');
+const fetchSeries = require('./lib/fetch-series');
+const fetchSeason = require('./lib/fetch-season');
 
 const DEFAULTS = {
 	collectionTransform: defaultCollectionTransform,
@@ -43,6 +45,16 @@ exports.initialize = options => {
 	);
 
 	bus.queryHandler(
+		{role, cmd, source: 'odd-livestream-series'},
+		exports.createSeriesHandler(bus, getChannel, client, collectionTransform)
+	);
+
+	bus.queryHandler(
+		{role, cmd, source: 'odd-livestream-season'},
+		exports.createSeasonHandler(bus, getChannel, client, collectionTransform)
+	);
+
+	bus.queryHandler(
 		{role, cmd, source: 'livestream-video'},
 		exports.createVideoHandler(bus, getChannel, client, videoTransform)
 	);
@@ -67,12 +79,60 @@ exports.createCollectionHandler = (bus, getChannel, client, transform) => {
 
 		if (!id || typeof id !== 'string') {
 			throw new Error(
-				'livestream-collection-provider spec.event.id String is required'
+				'livestream-collection spec.event.id String is required'
 			);
 		}
 
 		return getChannel(channelId).then(channel => {
 			return getCollection({spec, channel, event});
+		});
+	};
+};
+
+exports.createSeriesHandler = (bus, getChannel, client, transform) => {
+	const getSeries = fetchSeries(bus, client, transform);
+
+	// Called from Oddworks core via bus.query
+	// Expects:
+	//	args.spec.collection.id
+	return args => {
+		const spec = args.spec;
+		const event = spec.event || {};
+		const id = event.id;
+		const channelId = spec.channel;
+
+		if (!id || typeof id !== 'string') {
+			throw new Error(
+				'odd-livestream-series spec.event.id String is required'
+			);
+		}
+
+		return getChannel(channelId).then(channel => {
+			return getSeries({spec, channel, event});
+		});
+	};
+};
+
+exports.createSeasonHandler = (bus, getChannel, client, transform) => {
+	const getSeason = fetchSeason(bus, client, transform);
+
+	// Called from Oddworks core via bus.query
+	// Expects:
+	//	args.spec.collection.id
+	return args => {
+		const spec = args.spec;
+		const event = spec.event || {};
+		const id = event.id;
+		const channelId = spec.channel;
+
+		if (!id || typeof id !== 'string') {
+			throw new Error(
+				'odd-livestream-season spec.event.id String is required'
+			);
+		}
+
+		return getChannel(channelId).then(channel => {
+			return getSeason({spec, channel, event});
 		});
 	};
 };
@@ -91,7 +151,7 @@ exports.createVideoHandler = (bus, getChannel, client, transform) => {
 
 		if (!event.id || typeof event.id !== 'string') {
 			throw new Error(
-				'livestream-video-provider spec.event.id String is required'
+				'livestream-video spec.event.id String is required'
 			);
 		}
 
@@ -122,4 +182,16 @@ exports.createClient = options => {
 	}
 
 	return new Client({bus, apiKey, accountId});
+};
+
+exports.composeVideoId = (channel, event, video) => {
+	return `livestream-video-${channel}-${event}-${video}`;
+};
+
+exports.composeSeriesId = (channel, event) => {
+	return `odd-livestream-series-${channel}-${event}`;
+};
+
+exports.composeSeasonId = (channel, event, season) => {
+	return `odd-livestream-season-${channel}-${event}-${season.toLowerCase()}`;
 };
