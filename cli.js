@@ -6,10 +6,18 @@ const Client = require('./lib/client');
 
 const REQUEST_METHODS = Object.create(null);
 REQUEST_METHODS.makeRequest = '{"path": "STRING"}';
-REQUEST_METHODS.getPastEvents = '{"id": "STRING"}';
-REQUEST_METHODS.getUpcomingEvents = '{"id": "STRING"}';
+REQUEST_METHODS.getPastEvents = '{"page": 1, "maxItems": 10}';
+REQUEST_METHODS.getUpcomingEvents = '{"page": 1, "maxItems": 10}';
+REQUEST_METHODS.getPrivateEvents = '{"page": 1, "maxItems": 10}';
 REQUEST_METHODS.getEvent = '{"id": "STRING"}';
 REQUEST_METHODS.getEventVideos = '{"id": "STRING"}';
+REQUEST_METHODS.getVideo = '{"eventId": "STRING", "id": "STRING"}';
+
+const ENVIRONMENT_VARIABLES = [
+	'LIVESTREAM_API_KEY',
+	'LIVESTREAM_ACCOUNT_ID',
+	'LIVESTREAM_CLIENT_ID'
+];
 
 const listCommand = () => {
 	console.log('Request methods:');
@@ -19,6 +27,11 @@ const listCommand = () => {
 		if (REQUEST_METHODS[key]) {
 			console.log(`\t${key} --args ${REQUEST_METHODS[key]}`);
 		}
+	});
+
+	console.log('\nEnvironment Variables:\n');
+	ENVIRONMENT_VARIABLES.forEach(key => {
+		console.log('\t', key);
 	});
 
 	return Promise.resolve(null);
@@ -77,13 +90,16 @@ exports.main = () => {
 							describe: 'Arguments object as a JSON string'
 						},
 						apiKey: {
-							describe: 'Defaults to env var LIVESTREAM_API_KEY'
+							describe: 'Defaults to env var LIVESTREAM_API_KEY',
+							type: 'string'
 						},
 						accountId: {
-							describe: 'Defaults to env var LIVESTREAM_ACCOUNT_ID'
+							describe: 'Defaults to env var LIVESTREAM_ACCOUNT_ID',
+							type: 'string'
 						},
 						clientId: {
-							describe: 'Defaults to env var LIVESTREAM_CLIENT_ID'
+							describe: 'Defaults to env var LIVESTREAM_CLIENT_ID',
+							type: 'string'
 						}
 					})
 					.command('list', 'List client methods')

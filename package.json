@@ -25,19 +25,17 @@
   },
   "homepage": "https://github.com/oddnetworks/oddworks-livestream-provider#readme",
   "dependencies": {
-    "bluebird": "^3.4.6",
-    "boom": "^4.0.0",
-    "debug": "^2.2.0",
-    "lru-cache": "^4.0.2",
-    "request": "^2.74.0",
-    "yargs": "^5.0.0"
+    "bluebird": "~3.5.0",
+    "debug": "~2.6.0",
+    "request": "~2.81.0",
+    "yargs": "~7.0.0"
   },
   "devDependencies": {
-    "ava": "^0.16.0",
-    "nock": "^8.0.0",
-    "oddcast": "^2.1.0",
-    "sinon": "^1.17.5",
-    "xo": "^0.16.0"
+    "ava": "~0.18.0",
+    "nock": "~9.0.0",
+    "oddcast": "~2.2.0",
+    "sinon": "~1.17.5",
+    "xo": "~0.16.0"
   },
   "ava": {
     "files": [

@@ -85,6 +85,7 @@ test('when event not found', t => {
 			t.is(event.code, 'COLLECTION_NOT_FOUND');
 			t.deepEqual(event.spec, spec);
 			t.is(event.message, 'collection not found');
+			return null;
 		});
 	});
 });
@@ -99,6 +100,9 @@ test('when collection of videos is found', t => {
 
 	return collectionHandler({spec})
 		.then(res => {
+			const videoId = eventVideosResponseOffline.vods.data[0].data.id;
+			const eventId = eventVideosResponseOffline.vods.data[0].data.eventId;
+
 			t.deepEqual(Object.keys(res), [
 				'id',
 				'title',
@@ -109,6 +113,7 @@ test('when collection of videos is found', t => {
 				'relationships',
 				'meta'
 			]);
+
 			t.is(res.id, `res-livestream-collection-${eventResponseOffline.id}`);
 			t.is(res.title, eventResponseOffline.fullName);
 			t.is(res.description, eventResponseOffline.description);
@@ -116,7 +121,8 @@ test('when collection of videos is found', t => {
 			t.is(res.images[0].url, eventResponseOffline.logo.url);
 			t.is(res.images[1].url, eventResponseOffline.logo.smallUrl);
 			t.is(res.relationships.entities.data.length, eventVideosResponseOffline.vods.data.length);
-			t.is(res.relationships.entities.data[0].id, `res-livestream-video-${eventVideosResponseOffline.vods.data[0].data.id}`);
+			t.is(res.relationships.entities.data[0].id, `res-livestream-video-abc-${eventId}-${videoId}`);
 			t.is(res.relationships.entities.data[0].type, 'video');
+			return null;
 		});
 });

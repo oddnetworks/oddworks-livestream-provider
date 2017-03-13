@@ -17,12 +17,16 @@ let queryHandlerSpy;
 
 function videoHandler() {}
 function albumHandler() {}
+function seriesHandler() {}
+function seasonHandler() {}
 
 test.before(() => {
 	bus = helpers.createBus();
 
 	createVideoHandlerSpy = sinon.stub(provider, 'createVideoHandler').returns(videoHandler);
 	createCollectionHandlerSpy = sinon.stub(provider, 'createCollectionHandler').returns(albumHandler);
+	sinon.stub(provider, 'createSeriesHandler').returns(seriesHandler);
+	sinon.stub(provider, 'createSeasonHandler').returns(seasonHandler);
 	queryHandlerSpy = sinon.spy(bus, 'queryHandler');
 
 	const options = {
@@ -60,14 +64,22 @@ test('calls createCollectionHandler', t => {
 });
 
 test('calls bus.queryHandler', t => {
-	t.plan(3);
+	t.plan(5);
 
-	t.true(queryHandlerSpy.calledTwice);
+	t.is(queryHandlerSpy.callCount, 4);
 	t.deepEqual(queryHandlerSpy.firstCall.args, [
 		{role: 'provider', cmd: 'get', source: 'livestream-collection'},
 		albumHandler
 	]);
 	t.deepEqual(queryHandlerSpy.secondCall.args, [
+		{role: 'provider', cmd: 'get', source: 'odd-livestream-series'},
+		seriesHandler
+	]);
+	t.deepEqual(queryHandlerSpy.thirdCall.args, [
+		{role: 'provider', cmd: 'get', source: 'odd-livestream-season'},
+		seasonHandler
+	]);
+	t.deepEqual(queryHandlerSpy.args[3], [
 		{role: 'provider', cmd: 'get', source: 'livestream-video'},
 		videoHandler
 	]);
