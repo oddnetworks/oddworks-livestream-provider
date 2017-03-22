@@ -10,7 +10,7 @@ REQUEST_METHODS.getPastEvents = '{"page": 1, "maxItems": 10}';
 REQUEST_METHODS.getUpcomingEvents = '{"page": 1, "maxItems": 10}';
 REQUEST_METHODS.getPrivateEvents = '{"page": 1, "maxItems": 10}';
 REQUEST_METHODS.getEvent = '{"id": "STRING"}';
-REQUEST_METHODS.getEventVideos = '{"id": "STRING"}';
+REQUEST_METHODS.getEventVideos = '{"id": "STRING", "offset": "STRING", "older": 10, "newer": 0}';
 REQUEST_METHODS.getVideo = '{"eventId": "STRING", "id": "STRING"}';
 
 const ENVIRONMENT_VARIABLES = [
