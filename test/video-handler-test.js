@@ -33,8 +33,10 @@ let bus;
 let videoHandler = null;
 
 test.before(() => {
-	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/online/videos`).twice().reply(200, eventVideosResponseOnline);
-	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/offline/videos`).twice().reply(200, eventVideosResponseOffline);
+	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/1/videos?page=1&max_items=10`).reply(404);
+	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/online/videos?page=1&max_items=10`).twice().reply(200, eventVideosResponseOnline);
+	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/offline/videos?page=1&max_items=10`).twice().reply(200, eventVideosResponseOffline);
+	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/online/videos/1`).reply(404);
 	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/online/videos/${onlineVideoId}`).twice().reply(200, videoResponseOnline);
 });
 
@@ -62,14 +64,14 @@ test('when live event not found', t => {
 
 	return videoHandler({spec}).catch(err => {
 		// test error condition
-		t.is(err.message, `Video not found for event id "${spec.event.id}", video id "null"`);
+		t.is(err.message, `Live video not found for event id "${spec.event.id}"`);
 
 		// test bus event
 		return obs.then(event => {
-			t.deepEqual(event.error, {code: 'VIDEO_NOT_FOUND'});
 			t.is(event.code, 'VIDEO_NOT_FOUND');
 			t.deepEqual(event.spec, spec);
 			t.is(event.message, 'video not found');
+			return null;
 		});
 	});
 });
@@ -150,11 +152,10 @@ test('when vod not found', t => {
 
 	return videoHandler({spec}).catch(err => {
 		// test error condition
-		t.is(err.message, `Video not found for event id "${spec.event.id}", video id "1"`);
+		t.is(err.message, `Video not found for event id "${spec.event.id}" video id "1"`);
 
 		// test bus event
 		return obs.then(event => {
-			t.deepEqual(event.error, {code: 'VIDEO_NOT_FOUND'});
 			t.is(event.code, 'VIDEO_NOT_FOUND');
 			t.deepEqual(event.spec, spec);
 			t.is(event.message, 'video not found');

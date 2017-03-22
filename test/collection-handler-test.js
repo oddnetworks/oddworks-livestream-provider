@@ -32,7 +32,7 @@ let collectionHandler = null;
 const SPECS = [];
 
 test.before(() => {
-	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/offline/videos`).twice().reply(200, eventVideosResponseOffline);
+	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/offline/videos?page=1&max_items=10`).twice().reply(200, eventVideosResponseOffline);
 	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/1`).reply(404);
 	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/offline`).thrice().reply(200, eventResponseOffline);
 });
@@ -81,7 +81,6 @@ test('when event not found', t => {
 
 		// test bus event
 		return obs.then(event => {
-			t.deepEqual(event.error, {code: 'COLLECTION_NOT_FOUND'});
 			t.is(event.code, 'COLLECTION_NOT_FOUND');
 			t.deepEqual(event.spec, spec);
 			t.is(event.message, 'collection not found');
