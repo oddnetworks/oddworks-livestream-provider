@@ -33,9 +33,9 @@ let bus;
 let videoHandler = null;
 
 test.before(() => {
-	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/1/videos?page=1&max_items=10`).reply(404);
-	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/online/videos?page=1&max_items=10`).twice().reply(200, eventVideosResponseOnline);
-	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/offline/videos?page=1&max_items=10`).twice().reply(200, eventVideosResponseOffline);
+	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/1/videos?older=0&newer=0`).reply(404);
+	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/online/videos?older=0&newer=0`).twice().reply(200, eventVideosResponseOnline);
+	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/offline/videos?older=0&newer=0`).twice().reply(200, eventVideosResponseOffline);
 	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/online/videos/1`).reply(404);
 	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/online/videos/${onlineVideoId}`).twice().reply(200, videoResponseOnline);
 });
@@ -118,6 +118,10 @@ test('when live event found and broadcasting', t => {
 
 			t.is(res.duration, 0);
 			t.is(res.releaseDate, eventVideosResponseOnline.live.startTime);
+			return null;
+		}).catch(err => {
+			console.error('ERROR', err.stack);
+			return Promise.reject(err);
 		});
 });
 
@@ -132,6 +136,9 @@ test('when live event found and not broadcasting', t => {
 	return videoHandler({spec})
 		.then(res => {
 			t.is(res, null, 'result is null');
+		}).catch(err => {
+			console.error('ERROR', err.stack);
+			return Promise.reject(err);
 		});
 });
 

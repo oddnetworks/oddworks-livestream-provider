@@ -32,7 +32,7 @@ let collectionHandler = null;
 const SPECS = [];
 
 test.before(() => {
-	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/offline/videos?page=1&max_items=10`).twice().reply(200, eventVideosResponseOffline);
+	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/offline/videos?older=10&newer=0`).twice().reply(200, eventVideosResponseOffline);
 	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/1`).reply(404);
 	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/offline`).thrice().reply(200, eventResponseOffline);
 });
@@ -123,5 +123,8 @@ test('when collection of videos is found', t => {
 			t.is(res.relationships.entities.data[0].id, `res-livestream-video-abc-${eventId}-${videoId}`);
 			t.is(res.relationships.entities.data[0].type, 'video');
 			return null;
+		}).catch(err => {
+			console.error('ERROR', err.stack);
+			return Promise.reject(err);
 		});
 });
