@@ -1,0 +1,32 @@
+{
+  "vods": {
+    "total": 1,
+    "data": [
+      {
+        "type": "video",
+        "data": {
+          "id": 154135441,
+          "draft": false,
+          "views": 3,
+          "likes": {
+            "total": 0
+          },
+          "comments": {
+            "total": 0
+          },
+          "caption": "A test live video to VOD",
+          "description": null,
+          "duration": 402841,
+          "eventId": 7269024,
+          "createdAt": "2017-04-14T12:03:41.627Z",
+          "publishAt": "2017-04-14T12:10:56.269Z",
+          "tags": [],
+          "thumbnailUrl": "http://img.new.livestream.com/events/00000000006eeaa0/9f0d3438-7cac-4fb0-a7e2-23c89fc3fa7a_120.jpg",
+          "thumbnailUrlSmall": "http://img.new.livestream.com/events/00000000006eeaa0/9f0d3438-7cac-4fb0-a7e2-23c89fc3fa7a_120_150x84.jpg",
+          "m3u8": "https://livestreamapis.com/v2/accounts/21627744/events/7269024/videos/154135441.m3u8"
+        }
+      }
+    ]
+  },
+  "live": null
+}

@@ -1,0 +1,22 @@
+{
+  "id": 7268989,
+  "logo": {
+    "url": "http://img.new.livestream.com/events/00000000006eea7d/ebe85599-6889-42b7-96dd-9a4de797c1d5.jpg",
+    "thumbnailUrl": "http://img.new.livestream.com/events/00000000006eea7d/ebe85599-6889-42b7-96dd-9a4de797c1d5_50x28.jpg",
+    "smallUrl": "http://img.new.livestream.com/events/00000000006eea7d/ebe85599-6889-42b7-96dd-9a4de797c1d5_170x95.jpg"
+  },
+  "description": null,
+  "draft": false,
+  "likes": {
+    "total": 0
+  },
+  "fullName": "Test Live Event",
+  "shortName": null,
+  "ownerAccountId": 21627744,
+  "viewerCount": 1,
+  "createdAt": "2017-04-14T11:50:09.543Z",
+  "startTime": "2017-04-14T11:49:00.000Z",
+  "endTime": "2017-04-14T12:49:00.000Z",
+  "tags": [],
+  "isLive": false
+}

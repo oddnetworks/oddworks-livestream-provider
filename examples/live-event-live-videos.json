@@ -1,0 +1,27 @@
+{
+  "vods": {
+    "total": 0,
+    "data": []
+  },
+  "live": {
+    "id": 154135441,
+    "draft": true,
+    "views": 0,
+    "likes": {
+      "total": 0
+    },
+    "comments": {
+      "total": 0
+    },
+    "caption": "Video on Odd's iPhone event",
+    "description": null,
+    "duration": 0,
+    "eventId": 7269024,
+    "createdAt": "2017-04-14T12:03:41.627Z",
+    "publishAt": null,
+    "tags": [],
+    "thumbnailUrl": null,
+    "thumbnailUrlSmall": null,
+    "m3u8": "https://livestreamapis.com/v2/accounts/21627744/events/7269024/master.m3u8"
+  }
+}
