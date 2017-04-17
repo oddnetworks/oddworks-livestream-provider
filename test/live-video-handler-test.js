@@ -78,7 +78,7 @@ test('when live event not found', t => {
 });
 
 test('when live event not broadcasting', t => {
-	t.plan(6);
+	t.plan(7);
 
 	const spec = {
 		channel: 'abc',
@@ -88,6 +88,7 @@ test('when live event not broadcasting', t => {
 	};
 
 	return liveVideoHandler({spec}).then(video => {
+		t.is(video.channel, 'abc');
 		t.is(video.id, `res-livestream-live-video-offline`);
 		t.is(video.title, 'Odd Office');
 		t.is(video.images[0].url, 'http://cdn.livestream.com/newlivestream/poster-default.jpeg');
@@ -104,7 +105,7 @@ test('when live event not broadcasting', t => {
 });
 
 test('when live event is broadcasting', t => {
-	t.plan(6);
+	t.plan(7);
 
 	const spec = {
 		channel: 'abc',
@@ -114,6 +115,7 @@ test('when live event is broadcasting', t => {
 	};
 
 	return liveVideoHandler({spec}).then(video => {
+		t.is(video.channel, 'abc');
 		t.is(video.id, `res-livestream-live-video-online`);
 		t.is(video.title, 'Watch Us Code');
 		t.is(video.images[0].url, 'http://cdn.livestream.com/newlivestream/poster-default.jpeg');

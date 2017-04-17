@@ -88,6 +88,7 @@ test('when vod found', t => {
 	return videoHandler({spec})
 		.then(res => {
 			t.deepEqual(Object.keys(res), [
+				'channel',
 				'id',
 				'title',
 				'description',
