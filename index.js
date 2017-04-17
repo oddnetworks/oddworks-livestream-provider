@@ -6,6 +6,7 @@ const defaultVideoTransform = require('./lib/default-video-transform');
 const defaultCollectionTransform = require('./lib/default-collection-transform');
 const createChannelCache = require('./lib/create-channel-cache');
 const fetchVideo = require('./lib/fetch-video');
+const fetchLiveVideo = require('./lib/fetch-live-video');
 const fetchCollection = require('./lib/fetch-collection');
 const fetchSeries = require('./lib/fetch-series');
 const fetchSeason = require('./lib/fetch-season');
@@ -60,6 +61,11 @@ exports.initialize = options => {
 	bus.queryHandler(
 		{role, cmd, source: 'livestream-video'},
 		exports.createVideoHandler(bus, getChannel, client, videoTransform)
+	);
+
+	bus.queryHandler(
+		{role, cmd, source: 'livestream-live-video'},
+		exports.createLiveVideoHandler(bus, getChannel, client, videoTransform)
 	);
 
 	return Promise.resolve({
@@ -146,7 +152,37 @@ exports.createVideoHandler = (bus, getChannel, client, transform) => {
 	// Called from Oddworks core via bus.query
 	// Expects:
 	// args.spec.event.id *required
-	// args.spec.event.vod *optional id of the child VOD
+	// args.spec.video.id *required
+	return args => {
+		const spec = args.spec;
+		const channelId = spec.channel;
+		const event = spec.event || {};
+		const video = spec.video || {};
+
+		if (!event.id || typeof event.id !== 'string') {
+			throw new Error(
+				'livestream-video spec.event.id String is required'
+			);
+		}
+
+		if (!video.id || typeof video.id !== 'string') {
+			throw new Error(
+				'livestream-video spec.vidoe.id String is required'
+			);
+		}
+
+		return getChannel(channelId).then(channel => {
+			return getVideo({spec, channel, event});
+		});
+	};
+};
+
+exports.createLiveVideoHandler = (bus, getChannel, client, transform) => {
+	const getVideo = fetchLiveVideo(bus, client, transform);
+
+	// Called from Oddworks core via bus.query
+	// Expects:
+	// args.spec.event.id *required
 	return args => {
 		const spec = args.spec;
 		const channelId = spec.channel;
@@ -177,6 +213,14 @@ exports.createClient = options => {
 	const clientId = options.clientId;
 
 	return new Client({bus, apiKey, accountId, clientId});
+};
+
+exports.composeCollectionId = (channel, event) => {
+	return `livestream-collection-${channel}-${event}`;
+};
+
+exports.composeLiveVideoId = (channel, event, video) => {
+	return `livestream-live-video-${channel}-${event}-${video}`;
 };
 
 exports.composeVideoId = (channel, event, video) => {
