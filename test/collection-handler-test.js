@@ -29,7 +29,7 @@ const getChannel = () => {
 
 let bus;
 let collectionHandler = null;
-const SPECS = [];
+let SPECS = [];
 
 test.before(() => {
 	nock('https://livestreamapis.com').get(`/v2/accounts/${accountId}/events/offline/videos?older=10&newer=0`).twice().reply(200, eventVideosResponseOffline);
@@ -38,22 +38,13 @@ test.before(() => {
 });
 
 test.beforeEach(() => {
-	SPECS.splice(0, SPECS.length);
+	SPECS = [];
 	bus = helpers.createBus();
 
 	bus.commandHandler({role: 'catalog', cmd: 'setItemSpec'}, spec => {
 		SPECS.push(spec);
-		let id;
-		let type;
-
-		if (spec.video) {
-			id = spec.video.id;
-			type = 'video';
-		} else {
-			id = spec.collection.id;
-			type = 'collection';
-		}
-		return Promise.resolve({type: `${type}Spec`, resource: `res-livestream-${type}-${id}`});
+		spec.resource = spec.id.replace(/^spec/, 'res');
+		return Promise.resolve(spec);
 	});
 
 	const client = provider.createClient({apiKey: 'foo', accountId: 'bar'});
@@ -86,10 +77,15 @@ test('when event not found', t => {
 			t.is(event.message, 'collection not found');
 			return null;
 		});
+	}).catch(err => {
+		console.error('ERROR', err.stack);
+		return Promise.reject(err);
 	});
 });
 
 test('when collection of videos is found', t => {
+	t.plan(12);
+
 	const spec = {
 		channel: 'abc',
 		type: 'collectionSpec',
@@ -119,9 +115,15 @@ test('when collection of videos is found', t => {
 			t.is(res.images.length, 2);
 			t.is(res.images[0].url, eventResponseOffline.logo.url);
 			t.is(res.images[1].url, eventResponseOffline.logo.smallUrl);
-			t.is(res.relationships.entities.data.length, eventVideosResponseOffline.vods.data.length);
-			t.is(res.relationships.entities.data[0].id, `res-livestream-video-abc-${eventId}-${videoId}`);
+			t.is(res.relationships.entities.data.length, eventVideosResponseOffline.vods.data.length + 1);
+
+			// The first video is the live stream
+			t.is(res.relationships.entities.data[0].id, `res-livestream-live-video-abc-${eventId}`);
 			t.is(res.relationships.entities.data[0].type, 'video');
+
+			// Videos > index 0 are VOD
+			t.is(res.relationships.entities.data[1].id, `res-livestream-video-abc-${eventId}-${videoId}`);
+			t.is(res.relationships.entities.data[1].type, 'video');
 			return null;
 		}).catch(err => {
 			console.error('ERROR', err.stack);
