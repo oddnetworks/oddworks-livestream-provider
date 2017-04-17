@@ -1,6 +1,6 @@
 {
   "name": "oddworks-livestream-provider",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "An Oddworks provider plugin for Livestream APIs",
   "main": "index.js",
   "scripts": {
