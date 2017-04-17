@@ -83,9 +83,12 @@ exports.createCollectionHandler = (bus, getChannel, client, transform) => {
 	return args => {
 		const spec = args.spec;
 		const event = spec.event || {};
-		const id = event.id;
+		let id = event.id;
 		const channelId = spec.channel;
 
+		if (typeof id === 'number') {
+			id = id.toString();
+		}
 		if (!id || typeof id !== 'string') {
 			throw new Error(
 				'livestream-collection spec.event.id String is required'
@@ -107,9 +110,12 @@ exports.createSeriesHandler = (bus, getChannel, client, transform) => {
 	return args => {
 		const spec = args.spec;
 		const event = spec.event || {};
-		const id = event.id;
+		let id = event.id;
 		const channelId = spec.channel;
 
+		if (typeof id === 'number') {
+			id = id.toString();
+		}
 		if (!id || typeof id !== 'string') {
 			throw new Error(
 				'odd-livestream-series spec.event.id String is required'
@@ -131,9 +137,12 @@ exports.createSeasonHandler = (bus, getChannel, client, transform) => {
 	return args => {
 		const spec = args.spec;
 		const event = spec.event || {};
-		const id = event.id;
+		let id = event.id;
 		const channelId = spec.channel;
 
+		if (typeof id === 'number') {
+			id = id.toString();
+		}
 		if (!id || typeof id !== 'string') {
 			throw new Error(
 				'odd-livestream-season spec.event.id String is required'
@@ -159,12 +168,18 @@ exports.createVideoHandler = (bus, getChannel, client, transform) => {
 		const event = spec.event || {};
 		const video = spec.video || {};
 
+		if (typeof event.id === 'number') {
+			event.id = event.id.toString();
+		}
 		if (!event.id || typeof event.id !== 'string') {
 			throw new Error(
 				'livestream-video spec.event.id String is required'
 			);
 		}
 
+		if (typeof video.id === 'number') {
+			video.id = video.id.toString();
+		}
 		if (!video.id || typeof video.id !== 'string') {
 			throw new Error(
 				'livestream-video spec.vidoe.id String is required'
@@ -188,6 +203,9 @@ exports.createLiveVideoHandler = (bus, getChannel, client, transform) => {
 		const channelId = spec.channel;
 		const event = spec.event || {};
 
+		if (typeof event.id === 'number') {
+			event.id = event.id.toString();
+		}
 		if (!event.id || typeof event.id !== 'string') {
 			throw new Error(
 				'livestream-video spec.event.id String is required'
@@ -219,12 +237,12 @@ exports.composeCollectionId = (channel, event) => {
 	return `livestream-collection-${channel}-${event}`;
 };
 
-exports.composeLiveVideoId = (channel, event, video) => {
-	return `livestream-live-video-${channel}-${event}-${video}`;
-};
-
 exports.composeVideoId = (channel, event, video) => {
 	return `livestream-video-${channel}-${event}-${video}`;
+};
+
+exports.composeLiveVideoId = (channel, event) => {
+	return `livestream-live-video-${channel}-${event}`;
 };
 
 exports.composeSeriesId = (channel, event) => {
