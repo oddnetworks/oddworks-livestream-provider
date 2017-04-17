@@ -12,11 +12,13 @@ let bus;
 let result = null;
 
 let createVideoHandlerSpy;
+let createLiveVideoHandlerSpy;
 let createCollectionHandlerSpy;
 let queryHandlerSpy;
 
+function liveVideoHandler() {}
 function videoHandler() {}
-function albumHandler() {}
+function collectionHandler() {}
 function seriesHandler() {}
 function seasonHandler() {}
 
@@ -24,7 +26,8 @@ test.before(() => {
 	bus = helpers.createBus();
 
 	createVideoHandlerSpy = sinon.stub(provider, 'createVideoHandler').returns(videoHandler);
-	createCollectionHandlerSpy = sinon.stub(provider, 'createCollectionHandler').returns(albumHandler);
+	createLiveVideoHandlerSpy = sinon.stub(provider, 'createLiveVideoHandler').returns(liveVideoHandler);
+	createCollectionHandlerSpy = sinon.stub(provider, 'createCollectionHandler').returns(collectionHandler);
 	sinon.stub(provider, 'createSeriesHandler').returns(seriesHandler);
 	sinon.stub(provider, 'createSeasonHandler').returns(seasonHandler);
 	queryHandlerSpy = sinon.spy(bus, 'queryHandler');
@@ -56,6 +59,13 @@ test('calls createVideoHandler', t => {
 	t.true(createVideoHandlerSpy.calledWith(bus, sinon.match.func, result.client, defaultVideoTransform));
 });
 
+test('calls createLiveVideoHandler', t => {
+	t.plan(2);
+
+	t.true(createLiveVideoHandlerSpy.calledOnce);
+	t.true(createLiveVideoHandlerSpy.calledWith(bus, sinon.match.func, result.client, defaultVideoTransform));
+});
+
 test('calls createCollectionHandler', t => {
 	t.plan(2);
 
@@ -64,12 +74,12 @@ test('calls createCollectionHandler', t => {
 });
 
 test('calls bus.queryHandler', t => {
-	t.plan(5);
+	t.plan(6);
 
-	t.is(queryHandlerSpy.callCount, 4);
+	t.is(queryHandlerSpy.callCount, 5);
 	t.deepEqual(queryHandlerSpy.firstCall.args, [
 		{role: 'provider', cmd: 'get', source: 'livestream-collection'},
-		albumHandler
+		collectionHandler
 	]);
 	t.deepEqual(queryHandlerSpy.secondCall.args, [
 		{role: 'provider', cmd: 'get', source: 'odd-livestream-series'},
@@ -82,5 +92,9 @@ test('calls bus.queryHandler', t => {
 	t.deepEqual(queryHandlerSpy.args[3], [
 		{role: 'provider', cmd: 'get', source: 'livestream-video'},
 		videoHandler
+	]);
+	t.deepEqual(queryHandlerSpy.args[4], [
+		{role: 'provider', cmd: 'get', source: 'livestream-live-video'},
+		liveVideoHandler
 	]);
 });
