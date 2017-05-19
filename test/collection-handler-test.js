@@ -68,7 +68,7 @@ test('when event not found', t => {
 
 	return collectionHandler({spec}).catch(err => {
 		// test error condition
-		t.is(err.message, `Collection not found for event id "${spec.event.id}"`);
+		t.is(err.message, `Event not found for event id "${spec.event.id}"`);
 
 		// test bus event
 		return obs.then(event => {
