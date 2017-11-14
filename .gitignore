@@ -1,35 +1,35 @@
-# OS X
-.DS_Store*
-Icon?
-._*
-
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-.vscode/*
-
-# Linux
-.directory
-*~
-
-
-# npm
-node_modules
+# Logs
+logs
 *.log
-*.gz
+npm-debug.log*
 
-# vagrant
-.vagrant/
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
-public/css/*
-.sass-cache/*
+# node-waf configuration
+.lock-wscript
 
-logs/*
-pids/*
-.idea
+# Compiled binary addons (https://nodejs.org/api/addons.html)
+build/Release
 
-data/**/*.DELETE
+# Dependency directories
+node_modules/
 
-#so eslint can be used with eslint-config-xo without adding unnecessary files to repo
-.eslintrc
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# dotenv environment variables file
+.env
+

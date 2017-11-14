@@ -1,10 +1,10 @@
 {
   "name": "oddworks-livestream-provider",
-  "version": "2.2.4",
+  "version": "3.0.0",
   "description": "An Oddworks provider plugin for Livestream APIs",
   "main": "index.js",
   "scripts": {
-    "test": "xo && ava"
+    "test": "xo"
   },
   "repository": {
     "type": "git",
@@ -25,26 +25,8 @@
   },
   "homepage": "https://github.com/oddnetworks/oddworks-livestream-provider#readme",
   "dependencies": {
-    "bluebird": "~3.5.0",
-    "debug": "~2.6.0",
-    "request": "~2.81.0",
-    "yargs": "~7.0.0"
   },
   "devDependencies": {
-    "ava": "~0.18.0",
-    "nock": "~9.0.0",
-    "oddcast": "~2.2.0",
-    "sinon": "~1.17.5",
-    "xo": "~0.16.0"
-  },
-  "ava": {
-    "files": [
-      "test/**/*-test.js"
-    ],
-    "source": [
-      "lib/**/*",
-      "index.js"
-    ]
   },
   "xo": {
     "esnext": true,
@@ -52,8 +34,8 @@
       "node"
     ],
     "rules": {
-      "object-property-newline": 0,
-      "no-use-extend-native/no-use-extend-native": 0
+      "quotes": ["error", "backtick"],
+      "no-console": ["error"]
     }
   }
 }
