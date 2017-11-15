@@ -4,7 +4,11 @@
   "description": "An Oddworks provider plugin for Livestream APIs",
   "main": "index.js",
   "scripts": {
-    "test": "xo"
+    "test": "xo",
+    "lint": "xo"
+  },
+  "bin": {
+    "livestream": "./bin/cli"
   },
   "repository": {
     "type": "git",
@@ -24,9 +28,10 @@
     "url": "https://github.com/oddnetworks/oddworks-livestream-provider/issues"
   },
   "homepage": "https://github.com/oddnetworks/oddworks-livestream-provider#readme",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
+    "xo": "0.18.2",
+    "yargs": "10.0.3"
   },
   "xo": {
     "esnext": true,
@@ -34,8 +39,13 @@
       "node"
     ],
     "rules": {
-      "quotes": ["error", "backtick"],
-      "no-console": ["error"]
+      "quotes": [
+        "error",
+        "backtick"
+      ],
+      "no-console": [
+        "error"
+      ]
     }
   }
 }
