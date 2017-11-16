@@ -16,6 +16,17 @@ class Provider {
 		// Make sure methods keep the correct `this` throughout chained async calls.
 		this.getVod = this.getVod.bind(this);
 		this.getLiveVideo = this.getLiveVideo.bind(this);
+		this.getEventVideosPage = this.getEventVideosPage.bind(this);
+		this.getAllEventVideos = this.getAllEventVideos.bind(this);
+	}
+
+	genericRequest(args, query) {
+		args = args || {};
+
+		const accountId = this.accountId;
+		const path = args.path || ``;
+
+		return this.client(`/accounts/${accountId}${path}`, query);
 	}
 
 	getVod(args) {
@@ -25,12 +36,12 @@ class Provider {
 		const eventId = args.eventId;
 		const videoId = args.videoId;
 
-		if (!eventId || typeof eventId !== `string`) {
+		if (!eventId || (typeof eventId !== `string` && typeof eventId !== `number`)) {
 			throw new Error(
 				`Missing required "eventId" parameter in Livestream Provider#getVod()`
 			);
 		}
-		if (!videoId || typeof videoId !== `string`) {
+		if (!videoId || (typeof videoId !== `string` && typeof videoId !== `number`)) {
 			throw new Error(
 				`Missing required "videoId" parameter in Livestream Provider#getVod()`
 			);
@@ -45,13 +56,85 @@ class Provider {
 		const accountId = this.accountId;
 		const eventId = args.eventId;
 
-		if (!eventId || typeof eventId !== `string`) {
+		if (!eventId || (typeof eventId !== `string` && typeof eventId !== `number`)) {
 			throw new Error(
 				`Missing required "eventId" parameter in Livestream Provider#getLiveVideo()`
 			);
 		}
 
 		return this.client(`/accounts/${accountId}/events/${eventId}`);
+	}
+
+	getEventVideosPage(args) {
+		args = args || {};
+
+		const accountId = this.accountId;
+		const eventId = args.eventId;
+
+		if (!eventId || (typeof eventId !== `string` && typeof eventId !== `number`)) {
+			throw new Error(
+				`Missing required "eventId" parameter in Livestream Provider#getEventVideosPage()`
+			);
+		}
+
+		const params = {
+			older: args.older || 0,
+			newer: args.newer || 0
+		};
+
+		if (args.offset) {
+			params.offset_post_id = args.offset; // eslint-disable-line camelcase
+		}
+
+		return this.client(`/accounts/${accountId}/events/${eventId}/videos`, params);
+	}
+
+	getAllEventVideos(args) {
+		args = args || {};
+
+		const eventId = args.eventId;
+
+		if (!eventId || (typeof eventId !== `string` && typeof eventId !== `number`)) {
+			throw new Error(
+				`Missing required "eventId" parameter in Livestream Provider#getAllEventVideos()`
+			);
+		}
+
+		const maxItems = 20;
+		const pageArgs = {eventId};
+
+		function fetchPage(videos, provider, offset) {
+			const params = {older: maxItems};
+			if (offset) {
+				params.offset = offset;
+			}
+
+			return provider.getEventVideosPage(pageArgs, params).then(res => {
+				console.log(`RESPONSE`);
+				console.log(res);
+				if (res && res.vods && Array.isArray(res.vods.data)) {
+					// If we started with an offset, we need to shift it off the inclusive
+					// result set.
+					if (offset) {
+						res.vods.data.shift();
+					}
+					videos = videos.concat(
+						res.vods.data.filter(item => item.type === `video`).map(item => item.data)
+					);
+				}
+
+				// Check to see if this is all the results, or is there another page?
+				if (res && res.vods && Array.isArray(res.vods.data) && res.vods.data.length >= maxItems) {
+					// Set the new offset and request the next page.
+					offset = res.vods.data[res.vods.data.length - 1].data.id;
+					return fetchPage(videos, provider, offset);
+				}
+
+				return videos;
+			});
+		}
+
+		return fetchPage([], this);
 	}
 
 	getAsset(args) {
