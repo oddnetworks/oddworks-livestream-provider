@@ -115,12 +115,12 @@ class Provider {
 		const pageArgs = {eventId};
 
 		function fetchPage(videos, provider, offset) {
-			const params = {older: maxItems};
+			const params = Object.assign({}, pageArgs, {older: maxItems});
 			if (offset) {
 				params.offset = offset;
 			}
 
-			return provider.getEventVideosPage(pageArgs, params).then(res => {
+			return provider.getEventVideosPage(params).then(res => {
 				if (res && res.vods && Array.isArray(res.vods.data)) {
 					// If we started with an offset, we need to shift it off the inclusive
 					// result set.
