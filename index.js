@@ -1,5 +1,6 @@
 'use strict';
 
+const crypto = require(`crypto`);
 const APIClient = require(`./lib/api-client`);
 const vodToVideoTransform = require(`./lib/vod-to-video-transform`);
 const eventToLiveVideoTransform = require(`./lib/event-to-live-video-transform`);
@@ -181,6 +182,17 @@ class Provider {
 			default:
 				throw new Error(`No Livestream Provider method for subProvider "${subProvider}"`);
 		}
+	}
+
+	static signUrl(args, url) {
+		const {secretKey, clientId} = args;
+		const timestamp = Date.now();
+		const hmac = crypto.createHmac(`md5`, secretKey);
+
+		const str = `${secretKey}:playback:${timestamp}`;
+		const token = hmac.update(str).digest(`hex`);
+
+		return `${url}?client_id=${clientId}&timestamp=${timestamp}&token=${token}`;
 	}
 
 	// Returns an Array of Livestream accounts associated with the given secretKey.

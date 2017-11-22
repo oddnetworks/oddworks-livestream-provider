@@ -43,6 +43,22 @@ function parseCommandLineArguments() {
 			}
 		})
 		.command(`list`, `List client methods`)
+		.command(`sign-url`, `Sign a URL`, {
+			url: {
+				alias: `u`,
+				demand: true,
+				describe: `The URL string to sign`
+			},
+			secretKey: {
+				describe: `Defaults to env var LIVESTREAM_SECRET_KEY`,
+				type: `string`
+			},
+			clientId: {
+				describe: `The Livestream client ID to use`,
+				demand: true,
+				type: `string`
+			}
+		})
 		.help()
 		.argv;
 }
@@ -64,7 +80,7 @@ function listCommand() {
 		console.log(`\t`, key);
 	});
 
-	return Promise.resolve(null);
+	return Promise.resolve(0);
 }
 
 function requestCommand(args) {
@@ -74,12 +90,12 @@ function requestCommand(args) {
 
 	if (!method) {
 		console.error(`An method is required (--method)`);
-		return Promise.resolve(null);
+		return Promise.resolve(1);
 	}
 
 	if (!secretKey) {
 		console.error(`An secretKey is required (--secretKey)`);
-		return Promise.resolve(null);
+		return Promise.resolve(1);
 	}
 
 	let params;
@@ -88,7 +104,7 @@ function requestCommand(args) {
 	} catch (err) {
 		console.error(`--args JSON parsing error:`);
 		console.error(err.message);
-		return Promise.resolve(null);
+		return Promise.resolve(1);
 	}
 
 	if (method === `getAccounts`) {
@@ -100,7 +116,7 @@ function requestCommand(args) {
 
 	if (!accountId) {
 		console.error(`An accountId is required (--accountId)`);
-		return Promise.resolve(null);
+		return Promise.resolve(0);
 	}
 
 	const provider = Provider.create({
@@ -110,13 +126,25 @@ function requestCommand(args) {
 
 	if (typeof provider[method] !== `function`) {
 		console.error(`Invalid method "${method}": Provider#${method} is not a function.`);
-		return Promise.resolve(null);
+		return Promise.resolve(0);
 	}
 
 	return provider[method](params).then(res => {
 		console.log(JSON.stringify(res, null, 2));
-		return null;
+		return 0;
 	});
+}
+
+function signUrlCommand(args) {
+	const url = args.url;
+	const secretKey = args.secretKey;
+	const clientId = args.clientId;
+
+	console.log(``);
+	console.log(`URL:`);
+	console.log(``);
+	console.log(Provider.signUrl({secretKey, clientId}, url));
+	return Promise.resolve(0);
 }
 
 exports.main = function () {
@@ -133,10 +161,16 @@ exports.main = function () {
 				method: argv.method,
 				args: argv.args
 			});
+		case `sign-url`:
+			return signUrlCommand({
+				url: argv.url,
+				secretKey: argv.secretKey || process.env.LIVESTREAM_SECRET_KEY,
+				clientId: argv.clientId
+			});
 		default:
 			console.error(`A command argument is required.`);
 			console.error(`Use the --help flag to print out help.`);
-			return Promise.resolve(null);
+			return Promise.resolve(0);
 	}
 };
 

@@ -4,7 +4,10 @@
 const cli = require('../cli');
 
 cli.main()
-	.then(() => {
+	.then(code => {
+		if (code) {
+			process.exit(code);
+		}
 		console.log('');
 	})
 	.catch(err => {
