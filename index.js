@@ -188,7 +188,7 @@ class Provider {
 		const str = `${secretKey}:playback:${timestamp}`;
 		const token = hmac.update(str).digest(`hex`);
 
-		return `${url}?client_id=${clientId}&timestamp=${timestamp}&token=${token}`;
+		return `${url}?clientId=${clientId}&timestamp=${timestamp}&token=${token}`;
 	}
 
 	// Returns an Array of Livestream accounts associated with the given secretKey.
