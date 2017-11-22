@@ -9,7 +9,7 @@ const ENVIRONMENT_VARIABLES = [
 
 const REQUEST_METHODS = Object.freeze({
 	getAccounts: `{}`,
-	genericRequest: `{"path": "STRING"}`,
+	genericRequest: `{"path": "STRING", "query": {QUERY OBJECT}}`,
 	getEvent: `{"eventId": "STRING"}`,
 	getVod: `{"eventId": "STRING", "videoId": "STRING"}`,
 	getLiveVideo: `{"eventId": "STRING"}`,
@@ -127,6 +127,13 @@ function requestCommand(args) {
 	if (typeof provider[method] !== `function`) {
 		console.error(`Invalid method "${method}": Provider#${method} is not a function.`);
 		return Promise.resolve(0);
+	}
+
+	if (method === `genericRequest`) {
+		return provider.genericRequest(params.path, params.query).then(res => {
+			console.log(JSON.stringify(res, null, 2));
+			return 0;
+		});
 	}
 
 	return provider[method](params).then(res => {

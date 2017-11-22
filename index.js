@@ -21,12 +21,8 @@ class Provider {
 		this.getAllEventVideos = this.getAllEventVideos.bind(this);
 	}
 
-	genericRequest(args, query) {
-		args = args || {};
-
+	genericRequest(path, query) {
 		const accountId = this.accountId;
-		const path = args.path || ``;
-
 		return this.client(`/accounts/${accountId}${path}`, query);
 	}
 
