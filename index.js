@@ -29,6 +29,21 @@ class Provider {
 		return this.client(`/accounts/${accountId}${path}`, query);
 	}
 
+	getEvent(args) {
+		args = args || {};
+
+		const accountId = this.accountId;
+		const eventId = args.eventId;
+
+		if (!eventId || (typeof eventId !== `string` && typeof eventId !== `number`)) {
+			throw new Error(
+				`Missing required "eventId" parameter in Livestream Provider#getEvent()`
+			);
+		}
+
+		return this.client(`/accounts/${accountId}/events/${eventId}`);
+	}
+
 	getVod(args) {
 		args = args || {};
 
@@ -53,7 +68,6 @@ class Provider {
 	getLiveVideo(args) {
 		args = args || {};
 
-		const accountId = this.accountId;
 		const eventId = args.eventId;
 
 		if (!eventId || (typeof eventId !== `string` && typeof eventId !== `number`)) {
@@ -62,7 +76,7 @@ class Provider {
 			);
 		}
 
-		return this.client(`/accounts/${accountId}/events/${eventId}`);
+		return this.getEvent(args);
 	}
 
 	getEventVideosPage(args) {
@@ -110,8 +124,6 @@ class Provider {
 			}
 
 			return provider.getEventVideosPage(pageArgs, params).then(res => {
-				console.log(`RESPONSE`);
-				console.log(res);
 				if (res && res.vods && Array.isArray(res.vods.data)) {
 					// If we started with an offset, we need to shift it off the inclusive
 					// result set.
@@ -137,6 +149,7 @@ class Provider {
 		return fetchPage([], this);
 	}
 
+	// Standard method used by Oddworks applications to fetch a given asset.
 	getAsset(args) {
 		args = args || {};
 		const subProvider = args.subProvider;

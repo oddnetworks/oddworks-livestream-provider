@@ -10,6 +10,7 @@ const ENVIRONMENT_VARIABLES = [
 const REQUEST_METHODS = Object.freeze({
 	getAccounts: `{}`,
 	genericRequest: `{"path": "STRING"}`,
+	getEvent: `{"eventId": "STRING"}`,
 	getVod: `{"eventId": "STRING", "videoId": "STRING"}`,
 	getLiveVideo: `{"eventId": "STRING"}`,
 	getEventVideosPage: `{"eventId": "STRING", "older": NUMBER, "newer": NUMBER, "offset": NUMBER}`,
