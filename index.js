@@ -5,6 +5,13 @@ const APIClient = require(`./lib/api-client`);
 const vodToVideoTransform = require(`./lib/vod-to-video-transform`);
 const eventToLiveVideoTransform = require(`./lib/event-to-live-video-transform`);
 
+const EVENT_TYPES = [
+	`past_events`,
+	`upcoming_events`,
+	`draft_events`,
+	`private_events`
+];
+
 class Provider {
 	constructor(spec) {
 		this.accountId = spec.accountId;
@@ -24,6 +31,32 @@ class Provider {
 	genericRequest(path, query) {
 		const accountId = this.accountId;
 		return this.client(`/accounts/${accountId}${path}`, query);
+	}
+
+	getEventsByType(args) {
+		args = args || {};
+
+		const accountId = this.accountId;
+		const eventType = args.eventType;
+
+		if (EVENT_TYPES.indexOf(eventType) === -1) {
+			throw new Error(
+				`Invalid "eventType" parameter "${eventType}" in Livestream Provider#getEventsByType()`
+			);
+		}
+
+		function fetchPage(items, provider, page) {
+			return provider.client(`/accounts/${accountId}/${eventType}`, {page}).then(res => {
+				const {data} = res;
+				if (data.length === 0) {
+					return items;
+				}
+				items = items.concat(data);
+				return fetchPage(items, provider, page + 1);
+			});
+		}
+
+		return fetchPage([], this, 1);
 	}
 
 	getEvent(args) {
