@@ -69,14 +69,14 @@ List the API request commands you can make:
 $ bin/cli list
 Request methods:
 
-    getAccounts --args '{}'
-    genericRequest --args '{"path": "STRING", "query": {QUERY OBJECT}}'
-    getEvent --args '{"eventId": "STRING"}'
-    getVod --args '{"eventId": "STRING", "videoId": "STRING"}'
-    getLiveVideo --args '{"eventId": "STRING"}'
-    getEventVideosPage --args '{"eventId": "STRING", "older": NUMBER, "newer": NUMBER, "offset": NUMBER}'
-    getAllEventVideos --args '{"eventId": "STRING"}'
-    getAsset --args '{THE CURSOR OBJECT}'
+  getAccounts --args '{}'
+  genericRequest --args '{"path": "STRING", "query": {QUERY OBJECT}}'
+  getEventsByType --args '{"eventType": "past_events | upcoming_events | draft_events | private_events"}'
+  getEvent --args '{"eventId": "STRING"}'
+  getVod --args '{"eventId": "STRING", "videoId": "STRING"}'
+  getLiveVideo --args '{"eventId": "STRING"}'
+  getEventVideosPage --args '{"eventId": "STRING", "older": NUMBER, "newer": NUMBER, "offset": NUMBER}'
+  getAllEventVideos --args '{"eventId": "STRING"}'
 
 Environment Variables:
 

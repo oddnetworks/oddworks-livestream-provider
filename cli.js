@@ -15,8 +15,7 @@ const REQUEST_METHODS = Object.freeze({
 	getVod: `{"eventId": "STRING", "videoId": "STRING"}`,
 	getLiveVideo: `{"eventId": "STRING"}`,
 	getEventVideosPage: `{"eventId": "STRING", "older": NUMBER, "newer": NUMBER, "offset": NUMBER}`,
-	getAllEventVideos: `{"eventId": "STRING"}`,
-	getAsset: `{THE CURSOR OBJECT}`
+	getAllEventVideos: `{"eventId": "STRING"}`
 });
 
 function parseCommandLineArguments() {

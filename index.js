@@ -2,8 +2,7 @@
 
 const crypto = require(`crypto`);
 const APIClient = require(`./lib/api-client`);
-const vodToVideoTransform = require(`./lib/vod-to-video-transform`);
-const eventToLiveVideoTransform = require(`./lib/event-to-live-video-transform`);
+const eventToEventTransform = require(`./lib/event-to-event-transform`);
 
 const EVENT_TYPES = [
 	`past_events`,
@@ -180,37 +179,44 @@ class Provider {
 	}
 
 	// Standard method used by Oddworks applications to fetch a given asset.
-	getAsset(args) {
+	getAsset(type, channel, args) {
 		args = args || {};
-		const subProvider = args.subProvider;
-		args = args.args;
 
-		switch (subProvider) {
-			case `vod`:
-				return this.getVod(args).then(res => {
-					const video = vodToVideoTransform(res);
-					return {
-						data: video,
-						provider: `livestream`,
-						subProvider: `vod`,
-						args: {eventId: res.eventId, videoId: res.id},
-						source: res
-					};
-				});
-			case `live-video`:
-				return this.getLiveVideo(args).then(res => {
-					const video = eventToLiveVideoTransform(res);
-					return {
-						data: video,
-						provider: `livestream`,
-						subProvider: `live-video`,
-						args: {eventId: res.id},
-						source: res
-					};
-				});
+		switch (type) {
+			case `event`:
+				return this.getEventAsset(channel, args);
 			default:
-				throw new Error(`No Livestream Provider method for subProvider "${subProvider}"`);
+				throw new Error(`No Livestream Provider method for asset type "${type}"`);
 		}
+	}
+
+	getEventAsset(channel, args) {
+		args = args || {};
+
+		const eventId = args.eventId;
+
+		if (!channel || typeof channel !== `string`) {
+			throw new Error(
+				`Missing required "channel" parameter in Livestream Provider#getEventAsset()`
+			);
+		}
+		if (!eventId || (typeof eventId !== `string` && typeof eventId !== `number`)) {
+			throw new Error(
+				`Missing required "eventId" parameter in Livestream Provider#getEventAsset()`
+			);
+		}
+
+		const promises = [
+			this.getEvent({eventId}),
+			this.getEventVideosPage({eventId, older: 1})
+		];
+
+		return Promise.all(promises).then(results => {
+			const event = results[0];
+			const videos = (results[1].vods || {}).data || [];
+			const vod = videos[0] || null;
+			return eventToEventTransform(channel, event, vod);
+		});
 	}
 
 	static signUrl(args, url) {
