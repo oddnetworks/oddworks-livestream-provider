@@ -3,6 +3,7 @@
 const crypto = require(`crypto`);
 const APIClient = require(`./lib/api-client`);
 const eventToEventTransform = require(`./lib/event-to-event-transform`);
+const videoToVideoTransform = require(`./lib/video-to-video-transform`);
 
 const EVENT_TYPES = [
 	`past_events`,
@@ -13,18 +14,28 @@ const EVENT_TYPES = [
 
 class Provider {
 	constructor(spec) {
-		this.accountId = spec.accountId;
-
-		this.client = APIClient.createClient({
-			secretKey: spec.secretKey,
-			requestInterval: spec.requestInterval
+		Object.defineProperties(this, {
+			accountId: {
+				value: spec.accountId
+			},
+			client: {
+				value: APIClient.createClient({
+					secretKey: spec.secretKey,
+					requestInterval: spec.requestInterval
+				})
+			}
 		});
 
 		// Make sure methods keep the correct `this` throughout chained async calls.
-		this.getVod = this.getVod.bind(this);
-		this.getLiveVideo = this.getLiveVideo.bind(this);
+		this.genericRequest = this.genericRequest.bind(this);
+		this.getEventsByType = this.getEventsByType.bind(this);
+		this.getEvent = this.getEvent.bind(this);
+		this.getVideo = this.getVideo.bind(this);
 		this.getEventVideosPage = this.getEventVideosPage.bind(this);
 		this.getAllEventVideos = this.getAllEventVideos.bind(this);
+		this.getAsset = this.getAsset.bind(this);
+		this.getEventAsset = this.getEventAsset.bind(this);
+		this.getVideoAsset = this.getVideoAsset.bind(this);
 	}
 
 	genericRequest(path, query) {
@@ -73,7 +84,7 @@ class Provider {
 		return this.client(`/accounts/${accountId}/events/${eventId}`);
 	}
 
-	getVod(args) {
+	getVideo(args) {
 		args = args || {};
 
 		const accountId = this.accountId;
@@ -92,20 +103,6 @@ class Provider {
 		}
 
 		return this.client(`/accounts/${accountId}/events/${eventId}/videos/${videoId}`);
-	}
-
-	getLiveVideo(args) {
-		args = args || {};
-
-		const eventId = args.eventId;
-
-		if (!eventId || (typeof eventId !== `string` && typeof eventId !== `number`)) {
-			throw new Error(
-				`Missing required "eventId" parameter in Livestream Provider#getLiveVideo()`
-			);
-		}
-
-		return this.getEvent(args);
 	}
 
 	getEventVideosPage(args) {
@@ -185,6 +182,8 @@ class Provider {
 		switch (type) {
 			case `event`:
 				return this.getEventAsset(channel, args);
+			case `video`:
+				return this.getVideoAsset(channel, args);
 			default:
 				throw new Error(`No Livestream Provider method for asset type "${type}"`);
 		}
@@ -214,9 +213,45 @@ class Provider {
 		return Promise.all(promises).then(results => {
 			const event = results[0];
 			const videos = (results[1].vods || {}).data || [];
-			const vod = videos[0] || null;
+			const vod = videos[0] ? videos[0].data : null;
 			return eventToEventTransform(channel, event, vod);
 		});
+	}
+
+	getVideoAsset(channel, args) {
+		args = args || {};
+
+		const eventId = args.eventId;
+		const videoId = args.videoId;
+		const accountId = this.accountId;
+
+		if (!channel || typeof channel !== `string`) {
+			throw new Error(
+				`Missing required "channel" parameter in Livestream Provider#getVideoAsset()`
+			);
+		}
+		if (!eventId || (typeof eventId !== `string` && typeof eventId !== `number`)) {
+			throw new Error(
+				`Missing required "eventId" parameter in Livestream Provider#getVideoAsset()`
+			);
+		}
+		if (!videoId || (typeof videoId !== `string` && typeof videoId !== `number`)) {
+			throw new Error(
+				`Missing required "videoId" parameter in Livestream Provider#getVideoAsset()`
+			);
+		}
+
+		return this.getVideo({eventId, videoId}).then(video => {
+			return videoToVideoTransform(channel, accountId, video);
+		});
+	}
+
+	static eventToEventTransform(channel, source, vod) {
+		return eventToEventTransform(channel, source, vod);
+	}
+
+	static videoToVideoTransform(channel, accountId, source) {
+		return videoToVideoTransform(channel, accountId, source);
 	}
 
 	static signUrl(args, url) {
