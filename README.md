@@ -73,10 +73,10 @@ Request methods:
   genericRequest --args '{"path": "STRING", "query": {QUERY OBJECT}}'
   getEventsByType --args '{"eventType": "past_events | upcoming_events | draft_events | private_events"}'
   getEvent --args '{"eventId": "STRING"}'
-  getVod --args '{"eventId": "STRING", "videoId": "STRING"}'
-  getLiveVideo --args '{"eventId": "STRING"}'
+  getVideo --args '{"eventId": "STRING", "videoId": "STRING"}'
   getEventVideosPage --args '{"eventId": "STRING", "older": NUMBER, "newer": NUMBER, "offset": NUMBER}'
   getAllEventVideos --args '{"eventId": "STRING"}'
+  getAsset --args '{"type": "event | video", "channel": "CHANNEL_ID", "args": {}}'
 
 Environment Variables:
 

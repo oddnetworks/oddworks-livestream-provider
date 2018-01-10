@@ -12,10 +12,10 @@ const REQUEST_METHODS = Object.freeze({
 	genericRequest: `{"path": "STRING", "query": {QUERY OBJECT}}`,
 	getEventsByType: `{"eventType": "past_events | upcoming_events | draft_events | private_events"}`,
 	getEvent: `{"eventId": "STRING"}`,
-	getVod: `{"eventId": "STRING", "videoId": "STRING"}`,
-	getLiveVideo: `{"eventId": "STRING"}`,
+	getVideo: `{"eventId": "STRING", "videoId": "STRING"}`,
 	getEventVideosPage: `{"eventId": "STRING", "older": NUMBER, "newer": NUMBER, "offset": NUMBER}`,
-	getAllEventVideos: `{"eventId": "STRING"}`
+	getAllEventVideos: `{"eventId": "STRING"}`,
+	getAsset: `{"type": "event | video", "channel": "CHANNEL_ID", "args": {}}`
 });
 
 function parseCommandLineArguments() {
@@ -131,6 +131,13 @@ function requestCommand(args) {
 
 	if (method === `genericRequest`) {
 		return provider.genericRequest(params.path, params.query).then(res => {
+			console.log(JSON.stringify(res, null, 2));
+			return 0;
+		});
+	}
+
+	if (method === `getAsset`) {
+		return provider.getAsset(params.type, params.channel, params.args).then(res => {
 			console.log(JSON.stringify(res, null, 2));
 			return 0;
 		});
