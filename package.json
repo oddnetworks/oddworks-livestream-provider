@@ -1,6 +1,6 @@
 {
   "name": "oddworks-livestream-provider",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "description": "An Oddworks provider plugin for Livestream APIs",
   "main": "index.js",
   "scripts": {
@@ -25,9 +25,9 @@
   },
   "homepage": "https://github.com/oddnetworks/oddworks-livestream-provider#readme",
   "dependencies": {
-    "bluebird": "~3.5.0",
-    "debug": "~2.6.0",
-    "request": "~2.81.0",
+    "bluebird": "~3.5.1",
+    "debug": "~3.1.0",
+    "request": "~2.85.0",
     "yargs": "~7.0.0"
   },
   "devDependencies": {
