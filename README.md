@@ -2,7 +2,7 @@
 
 A Livestream provider plugin for the Oddworks content server.
 
-[![Build Status](https://travis-ci.org/oddnetworks/oddworks-livestream-provider.svg?branch=master)](https://travis-ci.org/oddnetworks/oddworks-livestream-provider)
+[![pipeline status](https://gitlab.com/oddnetworks/oddworks/livestream-provider/badges/master/pipeline.svg)](https://gitlab.com/oddnetworks/oddworks/livestream-provider/commits/master)
 
 Installation
 ------------

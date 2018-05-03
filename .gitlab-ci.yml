@@ -1,0 +1,41 @@
+stages:
+  - test
+
+node-6:
+  stage: test
+  image: node:6
+  variables:
+    NODE_ENV: test
+  before_script:
+    - npm install && npm rebuild
+  script:
+    - npm test
+  cache:
+    paths:
+      - node_modules/
+
+node-8:
+  stage: test
+  image: node:8
+  variables:
+    NODE_ENV: test
+  before_script:
+    - npm install && npm rebuild
+  script:
+    - npm test
+  cache:
+    paths:
+      - node_modules/
+
+node-10:
+  stage: test
+  image: node:10
+  variables:
+    NODE_ENV: test
+  before_script:
+    - npm install && npm rebuild
+  script:
+    - npm test
+  cache:
+    paths:
+      - node_modules/
